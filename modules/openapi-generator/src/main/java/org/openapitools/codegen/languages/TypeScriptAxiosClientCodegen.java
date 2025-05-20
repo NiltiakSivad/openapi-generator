@@ -17,7 +17,9 @@
 
 package org.openapitools.codegen.languages;
 
+import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -119,6 +121,32 @@ public class TypeScriptAxiosClientCodegen extends AbstractTypeScriptClientCodege
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    public void preprocessOpenAPI(OpenAPI openAPI) {
+        super.preprocessOpenAPI(openAPI);
+
+        boolean hasIamAuth = false;
+
+        // Check security schemes in components for aws-iam-auth
+        if (openAPI.getComponents() != null &&
+                openAPI.getComponents().getSecuritySchemes() != null) {
+            if (openAPI.getComponents().getSecuritySchemes().containsKey("iam-authorizer")) {
+                hasIamAuth = true;
+            }
+        }
+
+        // Also check global security requirements for aws-iam-auth
+        if (!hasIamAuth && openAPI.getSecurity() != null) {
+            for (SecurityRequirement requirement : openAPI.getSecurity()) {
+                if (requirement.containsKey("iam-authorizer")) {
+                    hasIamAuth = true;
+                    break;
+                }
+            }
+        }
+        additionalProperties.put(CodegenConstants.WITH_AWSV4_SIGNATURE_COMMENT, hasIamAuth);
     }
 
     @Override
