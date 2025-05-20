@@ -23,6 +23,7 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
+
 /**
  * 
  * @export
@@ -378,7 +379,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -411,7 +411,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication http_bearer_auth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);

@@ -9,6 +9,12 @@ import { RequiredError } from "./base{{importFileExtension}}";
 {{#withNodeImports}}
 import { URL, URLSearchParams } from 'url';
 {{/withNodeImports}}
+{{#withAWSV4Signature}}
+import * as aws4 from 'aws4';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { BASE_PATH } from './base';
+import { OutgoingHttpHeaders } from 'http';
+{{/withAWSV4Signature}}
 
 /**
  *
@@ -62,6 +68,73 @@ export const setBearerAuthToObject = async function (object: any, configuration?
         object["Authorization"] = "Bearer " + accessToken;
     }
 }
+
+{{#withAWSV4Signature}}
+/**
+ * AWS V4 signature authentication
+ * @throws {RequiredError}
+ * @export
+ */
+export const getSignedAwsHeaders = async function (requestOptions: any, url: URL, configuration?: Configuration): Promise<OutgoingHttpHeaders> {
+    try {
+        let credentials;
+
+        // Strategy 1: Use explicit credentials if provided (highest priority)
+        if (configuration?.awsv4?.credentials?.accessKeyId &&
+            configuration?.awsv4?.credentials?.secretAccessKey &&
+            configuration?.awsv4?.credentials?.sessionToken) {
+
+            credentials = {
+                accessKeyId: configuration.awsv4.credentials.accessKeyId,
+                secretAccessKey: configuration.awsv4.credentials.secretAccessKey,
+                sessionToken: configuration.awsv4.credentials.sessionToken
+            };
+        } else {
+            // Strategy 2: Use AWS SDK default provider chain
+            // (handles env vars, profiles, IAM roles, etc. automatically)
+            credentials = await defaultProvider()();
+        }
+
+        // Construct the real URL for signing (not the dummy URL)
+        // Get the real base path from configuration or default BASE_PATH
+        const realBasePath = configuration?.basePath || BASE_PATH || '';
+        let realUrl: URL;
+
+        if (realBasePath) {
+            // If we have a base path, construct the full URL
+            const fullUrl = realBasePath.replace(/\/+$/, '') + url.pathname + url.search;
+            realUrl = new URL(fullUrl);
+        } else {
+            // ERROR: Cannot sign AWS request without a real base URL
+            // The dummy URL (example.com) would result in invalid signatures
+            console.error('AWS V4 Signature Error: No basePath configured. Set configuration.basePath to your AWS API Gateway URL (e.g., "https://abc123.execute-api.us-east-1.amazonaws.com/prod")');
+            throw new Error('AWS V4 Signature requires a real basePath, not dummy URL');
+        }
+
+        // Create request object in format expected by aws4.sign()
+        const requestToSign = {
+            host: realUrl.host,
+            path: realUrl.pathname + realUrl.search,
+            method: requestOptions.method?.toUpperCase() || 'GET',
+            headers: { ...requestOptions.headers },
+            body: requestOptions.data,
+            service: configuration?.awsv4?.options?.service || 'execute-api',
+            region: configuration?.awsv4?.options?.region || process.env.AWS_REGION || 'us-east-1'
+        };
+
+        // Sign the request
+        const signedRequest = aws4.sign(requestToSign, credentials);
+
+        // Return the AWS signature headers (Authorization, X-Amz-Date, etc.)
+        return signedRequest.headers || {};
+
+    } catch (error) {
+        console.warn('AWS credential resolution failed:', error);
+        // Return empty headers on failure
+        return {};
+    }
+}
+{{/withAWSV4Signature}}
 
 /**
  *

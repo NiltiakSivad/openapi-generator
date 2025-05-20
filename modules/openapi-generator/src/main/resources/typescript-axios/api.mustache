@@ -21,6 +21,10 @@ import type { RequestArgs } from './base{{importFileExtension}}';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base{{importFileExtension}}';
 
+{{#withAWSV4Signature}}
+import { getSignedAwsHeaders } from './common';
+{{/withAWSV4Signature}}
+
 {{#models}}
 {{#model}}{{#isEnum}}{{>modelEnum}}{{/isEnum}}{{#oneOf}}{{#-first}}{{>modelOneOf}}{{/-first}}{{/oneOf}}{{^isEnum}}{{^oneOf}}{{>modelGeneric}}{{/oneOf}}{{/isEnum}}{{/model}}
 {{/models}}

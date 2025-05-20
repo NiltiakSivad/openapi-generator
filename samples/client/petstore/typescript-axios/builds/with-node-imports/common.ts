@@ -72,6 +72,7 @@ export const setBearerAuthToObject = async function (object: any, configuration?
     }
 }
 
+
 /**
  *
  * @export

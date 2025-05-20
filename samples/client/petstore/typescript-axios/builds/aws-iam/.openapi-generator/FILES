@@ -1,0 +1,10 @@
+.gitignore
+.npmignore
+api.ts
+base.ts
+common.ts
+configuration.ts
+docs/DefaultApi.md
+docs/Pet.md
+git_push.sh
+index.ts

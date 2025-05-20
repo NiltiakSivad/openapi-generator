@@ -19,6 +19,10 @@ import FormData from 'form-data'
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '{{apiRelativeToRoot}}common{{importFileExtension}}';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '{{apiRelativeToRoot}}base{{importFileExtension}}';
+{{#withAWSV4Signature}}
+// @ts-ignore
+import { getSignedAwsHeaders } from '{{apiRelativeToRoot}}common';
+{{/withAWSV4Signature}}
 {{#imports}}
 // @ts-ignore
 import type { {{classname}} } from '{{apiRelativeToRoot}}{{tsModelPackage}}{{importFileExtension}}';
@@ -67,16 +71,19 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;{{#vendorExtensions}}{{#hasFormParams}}
             const localVarFormParams = new {{^multipartFormData}}URLSearchParams(){{/multipartFormData}}{{#multipartFormData}}((configuration && configuration.formDataCtor) || FormData)(){{/multipartFormData}};{{/hasFormParams}}{{/vendorExtensions}}
+            let awsSignatureHeaders = {};
 
     {{#authMethods}}
             // authentication {{name}} required
             {{#isApiKey}}
+            {{^isAWSV4Signature}}
             {{#isKeyInHeader}}
             await setApiKeyToObject(localVarHeaderParameter, "{{keyParamName}}", configuration)
             {{/isKeyInHeader}}
             {{#isKeyInQuery}}
             await setApiKeyToObject(localVarQueryParameter, "{{keyParamName}}", configuration)
             {{/isKeyInQuery}}
+            {{/isAWSV4Signature}}
             {{/isApiKey}}
             {{#isBasicBasic}}
             // http basic authentication required
@@ -90,7 +97,10 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "{{name}}", [{{#scopes}}"{{{scope}}}"{{^-last}}, {{/-last}}{{/scopes}}], configuration)
             {{/isOAuth}}
-
+            {{#isAWSV4Signature}}
+            // aws v4 signature required
+            awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)
+            {{/isAWSV4Signature}}
     {{/authMethods}}
     {{#queryParams}}
             {{#isArray}}
@@ -225,7 +235,7 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
     {{/headerParams}}
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions,{{#hasFormParams}}{{#multipartFormData}} ...(localVarFormParams as any).getHeaders?.(),{{/multipartFormData}}{{/hasFormParams}} ...options.headers};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions,{{#hasFormParams}}{{#multipartFormData}} ...(localVarFormParams as any).getHeaders?.(),{{/multipartFormData}}{{/hasFormParams}} ...awsSignatureHeaders, ...options.headers};
     {{#hasFormParams}}
             localVarRequestOptions.data = localVarFormParams{{#vendorExtensions}}{{^multipartFormData}}.toString(){{/multipartFormData}}{{/vendorExtensions}};
     {{/hasFormParams}}

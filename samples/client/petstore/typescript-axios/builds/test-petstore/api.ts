@@ -23,6 +23,7 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
+
 /**
  * 
  * @export
@@ -2370,7 +2371,6 @@ export const FakeApiAxiosParamCreator = function (configuration?: Configuration)
             // http basic authentication required
             setBasicAuthToObject(localVarRequestOptions, configuration)
 
-
             if (integer !== undefined) { 
                 localVarFormParams.set('integer', integer as any);
             }
@@ -2547,7 +2547,6 @@ export const FakeApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication bearer_test required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
             if (requiredStringGroup !== undefined) {
                 localVarQueryParameter['required_string_group'] = requiredStringGroup;
             }
@@ -3667,7 +3666,6 @@ export const FakeClassnameTags123ApiAxiosParamCreator = function (configuration?
             // authentication api_key_query required
             await setApiKeyToObject(localVarQueryParameter, "api_key_query", configuration)
 
-
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
@@ -3780,9 +3778,7 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
             // authentication http_signature_test required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -3825,7 +3821,6 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
 
-
     
             if (apiKey != null) {
                 localVarHeaderParameter['api_key'] = String(apiKey);
@@ -3864,9 +3859,7 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
             // authentication http_signature_test required
-
             if (status) {
                 localVarQueryParameter['status'] = status.join(COLLECTION_FORMATS.csv);
             }
@@ -3908,9 +3901,7 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
             // authentication http_signature_test required
-
             if (tags) {
                 localVarQueryParameter['tags'] = tags.join(COLLECTION_FORMATS.csv);
             }
@@ -3952,7 +3943,6 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication api_key required
             await setApiKeyToObject(localVarHeaderParameter, "api_key", configuration)
 
-
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -3988,9 +3978,7 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
             // authentication http_signature_test required
-
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -4034,7 +4022,6 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
 
             if (name !== undefined) { 
                 localVarFormParams.set('name', name as any);
@@ -4086,7 +4073,6 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
 
             if (additionalMetadata !== undefined) { 
                 localVarFormParams.append('additionalMetadata', additionalMetadata as any);
@@ -4140,7 +4126,6 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
 
             if (additionalMetadata !== undefined) { 
                 localVarFormParams.append('additionalMetadata', additionalMetadata as any);
@@ -4605,7 +4590,6 @@ export const StoreApiAxiosParamCreator = function (configuration?: Configuration
 
             // authentication api_key required
             await setApiKeyToObject(localVarHeaderParameter, "api_key", configuration)
-
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
