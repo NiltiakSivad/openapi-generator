@@ -26,7 +26,13 @@
     "prepare": "npm run build"
   },
   "dependencies": {
+    {{#withAWSV4Signature}}
+    "axios": "{{axiosVersion}}",
+    "aws4": "^1.11.0"
+    {{/withAWSV4Signature}}
+    {{^withAWSV4Signature}}
     "axios": "{{axiosVersion}}"
+    {{/withAWSV4Signature}}
   },
   "devDependencies": {
     "@types/node": "12.11.5 - 12.20.42",
