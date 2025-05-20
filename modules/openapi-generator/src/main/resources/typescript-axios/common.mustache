@@ -63,6 +63,47 @@ export const setBearerAuthToObject = async function (object: any, configuration?
     }
 }
 
+{{#withAWSV4Signature}}
+/**
+*
+* @export
+*/
+export const setAwsSignatureToObject = async function (object: any, url: URL, configuration?: Configuration) {
+    if (configuration && configuration.awsv4) {
+        const accessKey = configuration.awsv4.credentials.accessKeyId || process.env.AWS_ACCESS_KEY_ID;
+        const secretKey = configuration.awsv4.credentials.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY;
+        const sessionToken = configuration.awsv4.credentials.sessionToken || process.env.AWS_SESSION_TOKEN;
+        const service = configuration.awsv4.options.service || 'execute-api';
+        const region = configuration.awsv4.options.region || 'us-east-1';
+
+        if (accessKey && secretKey) {
+            const searchParams = new URLSearchParams(url.search);
+            const signer = aws4.sign({
+                host: url.host,
+                service: service,
+                region: region,
+                path: url.pathname + (searchParams.toString() ? "?" + searchParams.toString() : ""),
+                headers: object.headers,
+                body: object.data,
+                },
+                {
+                accessKeyId: accessKey,
+                secretAccessKey: secretKey,
+                sessionToken: sessionToken,
+            });
+
+            if (signer.headers) {
+                object.headers["X-Amz-Date"] = signer.headers["X-Amz-Date"];
+                if (signer.headers["X-Amz-Security-Token"]) {
+                    object.headers["X-Amz-Security-Token"] = signer.headers["X-Amz-Security-Token"];
+                }
+                object.headers["Authorization"] = signer.headers["Authorization"];
+            }
+        }
+    }
+}
+{{/withAWSV4Signature}}
+
 /**
  *
  * @export
