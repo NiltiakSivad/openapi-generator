@@ -111,3 +111,4 @@ Authentication schemes defined for the API:
 
 - **Type**: Bearer authentication
 
+

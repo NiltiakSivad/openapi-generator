@@ -106,3 +106,4 @@ Authentication schemes defined for the API:
 - **API key parameter name**: api_key
 - **Location**: HTTP header
 
+

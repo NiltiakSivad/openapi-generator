@@ -19,6 +19,10 @@ import FormData from 'form-data'
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '{{apiRelativeToRoot}}common{{importFileExtension}}';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '{{apiRelativeToRoot}}base{{importFileExtension}}';
+{{#withAWSV4Signature}}
+// @ts-ignore
+import { setAwsSignatureToObject } from '{{apiRelativeToRoot}}common';
+{{/withAWSV4Signature}}
 {{#imports}}
 // @ts-ignore
 import type { {{classname}} } from '{{apiRelativeToRoot}}{{tsModelPackage}}{{importFileExtension}}';
@@ -90,7 +94,10 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "{{name}}", [{{#scopes}}"{{{scope}}}"{{^-last}}, {{/-last}}{{/scopes}}], configuration)
             {{/isOAuth}}
-
+            {{#isAWSV4Signature}}
+            // aws v4 signature required
+            await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
+            {{/isAWSV4Signature}}
     {{/authMethods}}
     {{#queryParams}}
             {{#isArray}}

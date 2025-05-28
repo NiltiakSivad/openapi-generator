@@ -94,3 +94,92 @@ Class | Method | HTTP request | Description
 {{/isOAuth}}
 
 {{/authMethods}}
+
+{{#withAWSV4Signature}}
+<a id="aws-v4-signature"></a>
+### AWS V4 Signature
+
+This client supports AWS Signature Version 4 for authenticating requests to AWS services.
+
+#### Configuration
+
+```typescript
+import { Configuration } from '{{npmName}}';
+
+const configuration = new Configuration({
+  awsv4: {
+    credentials: {
+      accessKeyId: 'your-access-key-id',
+      secretAccessKey: 'your-secret-access-key',
+      sessionToken: 'your-session-token' // Optional, for temporary credentials
+    },
+    options: {
+      region: 'us-east-1', // AWS region
+      service: 'execute-api' // AWS service name, typically 'execute-api' for API Gateway
+    }
+  }
+});
+```
+
+#### Environment Variables
+
+You can also use environment variables for AWS credentials:
+
+```bash
+export AWS_ACCESS_KEY_ID=your-access-key-id
+export AWS_SECRET_ACCESS_KEY=your-secret-access-key
+export AWS_SESSION_TOKEN=your-session-token  # Optional
+```
+
+When environment variables are set, they will be used as fallbacks if not provided in the configuration.
+
+#### Usage Example
+
+```typescript
+import { DefaultApi, Configuration } from '{{npmName}}';
+
+const configuration = new Configuration({
+  basePath: 'https://your-api-gateway-id.execute-api.us-east-1.amazonaws.com/stage',
+  awsv4: {
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      sessionToken: process.env.AWS_SESSION_TOKEN
+    },
+    options: {
+      region: 'us-east-1',
+      service: 'execute-api'
+    }
+  }
+});
+
+const apiInstance = new DefaultApi(configuration);
+
+// All requests will now be signed with AWS V4 signature
+apiInstance.someMethod().then((response) => {
+  console.log(response.data);
+}).catch((error) => {
+  console.error(error);
+});
+```
+
+#### IAM Permissions
+
+Ensure your AWS credentials have the necessary IAM permissions to access the API endpoints. For API Gateway, this typically includes:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "execute-api:Invoke"
+      ],
+      "Resource": "arn:aws:execute-api:region:account-id:api-id/*"
+    }
+  ]
+}
+```
+
+{{/withAWSV4Signature}}
