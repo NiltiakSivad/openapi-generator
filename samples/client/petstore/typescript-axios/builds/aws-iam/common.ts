@@ -112,15 +112,34 @@ export const setAwsSignatureToObject = async function (requestOptions: any, url:
                 realUrl = url;
             }
 
+            // Handle AWS service-specific URL patterns
+            let signingPath = realUrl.pathname + realUrl.search;
+
+            // API Gateway stage handling
+            if (configuration.awsv4.options?.stage) {
+                const stage = configuration.awsv4.options.stage.startsWith('/')
+                    ? configuration.awsv4.options.stage
+                    : '/' + configuration.awsv4.options.stage;
+                signingPath = stage + signingPath;
+            }
+
+            // Custom path prefix handling (alternative to stage)
+            if (configuration.awsv4.options?.pathPrefix && !configuration.awsv4.options?.stage) {
+                const prefix = configuration.awsv4.options.pathPrefix.startsWith('/')
+                    ? configuration.awsv4.options.pathPrefix
+                    : '/' + configuration.awsv4.options.pathPrefix;
+                signingPath = prefix + signingPath;
+            }
+
             // Create request object in format expected by aws4.sign()
             const requestToSign = {
                 host: realUrl.host,
-                path: realUrl.pathname + realUrl.search,
+                path: signingPath,
                 method: requestOptions.method?.toUpperCase() || 'GET',
                 headers: { ...requestOptions.headers },
                 body: requestOptions.data,
-                service: configuration.awsv4.options.service || 'execute-api',
-                region: configuration.awsv4.options.region || process.env.AWS_REGION || 'us-east-1'
+                service: configuration.awsv4.options?.service || 'execute-api',
+                region: configuration.awsv4.options?.region || process.env.AWS_REGION || 'us-east-1'
             };
 
             // Sign the request
