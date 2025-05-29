@@ -11,6 +11,8 @@ import { URL, URLSearchParams } from 'url';
 {{/withNodeImports}}
 {{#withAWSV4Signature}}
 import * as aws4 from 'aws4';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { BASE_PATH } from './base';
 {{/withAWSV4Signature}}
 
 /**
@@ -68,40 +70,68 @@ export const setBearerAuthToObject = async function (object: any, configuration?
 
 {{#withAWSV4Signature}}
 /**
-*
-* @export
-*/
-export const setAwsSignatureToObject = async function (object: any, url: URL, configuration?: Configuration) {
-    if (configuration && configuration.awsv4) {
-        const accessKey = configuration.awsv4.credentials.accessKeyId || process.env.AWS_ACCESS_KEY_ID;
-        const secretKey = configuration.awsv4.credentials.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY;
-        const sessionToken = configuration.awsv4.credentials.sessionToken || process.env.AWS_SESSION_TOKEN;
-        const service = configuration.awsv4.options.service || 'execute-api';
-        const region = configuration.awsv4.options.region || 'us-east-1';
+ * AWS V4 signature authentication
+ * @throws {RequiredError}
+ * @export
+ */
+export const setAwsSignatureToObject = async function (requestOptions: any, url: URL, configuration?: Configuration) {
+    if (configuration?.awsv4) {
+        try {
+            let credentials;
 
-        if (accessKey && secretKey) {
-            const searchParams = new URLSearchParams(url.search);
-            const signer = aws4.sign({
-                host: url.host,
-                service: service,
-                region: region,
-                path: url.pathname + (searchParams.toString() ? "?" + searchParams.toString() : ""),
-                headers: object.headers,
-                body: object.data,
-                },
-                {
-                accessKeyId: accessKey,
-                secretAccessKey: secretKey,
-                sessionToken: sessionToken,
-            });
-
-            if (signer.headers) {
-                object.headers["X-Amz-Date"] = signer.headers["X-Amz-Date"];
-                if (signer.headers["X-Amz-Security-Token"]) {
-                    object.headers["X-Amz-Security-Token"] = signer.headers["X-Amz-Security-Token"];
-                }
-                object.headers["Authorization"] = signer.headers["Authorization"];
+            // Strategy 1: Use explicit credentials if provided (highest priority)
+            if (configuration.awsv4.credentials?.accessKeyId &&
+                configuration.awsv4.credentials?.secretAccessKey) {
+                credentials = {
+                    accessKeyId: configuration.awsv4.credentials.accessKeyId,
+                    secretAccessKey: configuration.awsv4.credentials.secretAccessKey,
+                    sessionToken: configuration.awsv4.credentials.sessionToken
+                };
+            } else {
+                // Strategy 2: Use AWS SDK default provider chain
+                // (handles env vars, profiles, IAM roles, etc. automatically)
+                credentials = await defaultProvider()();
             }
+
+            // Construct the real URL for signing (not the dummy URL)
+            // Get the real base path from configuration or default BASE_PATH
+            const realBasePath = configuration.basePath || BASE_PATH || '';
+            let realUrl: URL;
+
+            if (realBasePath) {
+                // If we have a base path, construct the full URL
+                const fullUrl = realBasePath.replace(/\/+$/, '') + url.pathname + url.search;
+                realUrl = new URL(fullUrl);
+            } else {
+                // Fallback to the original URL (though this might still be dummy)
+                realUrl = url;
+            }
+
+            // Create request object in format expected by aws4.sign()
+            const requestToSign = {
+                host: realUrl.host,
+                path: realUrl.pathname + realUrl.search,
+                method: requestOptions.method?.toUpperCase() || 'GET',
+                headers: { ...requestOptions.headers },
+                body: requestOptions.data,
+                service: configuration.awsv4.options.service || 'execute-api',
+                region: configuration.awsv4.options.region || process.env.AWS_REGION || 'us-east-1'
+            };
+
+            // Sign the request
+            const signedRequest = aws4.sign(requestToSign, credentials);
+
+            // Apply signed headers to axios request
+            if (signedRequest.headers) {
+                requestOptions.headers = {
+                    ...requestOptions.headers,
+                    ...signedRequest.headers
+                };
+            }
+
+        } catch (error) {
+            console.warn('AWS credential resolution failed:', error);
+            // Continue without signing - let the request proceed
         }
     }
 }

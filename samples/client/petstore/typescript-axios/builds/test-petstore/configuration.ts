@@ -52,7 +52,7 @@ export class Configuration {
      * @memberof Configuration
      */
     accessToken?: string | Promise<string> | ((name?: string, scopes?: string[]) => string) | ((name?: string, scopes?: string[]) => Promise<string>);
-    /**
+     /**
      * override base path
      *
      * @type {string}

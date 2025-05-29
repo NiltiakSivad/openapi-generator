@@ -7,7 +7,7 @@ export interface AWSv4Configuration {
     options?: {
         region?: string
         service?: string
-    }
+}
     credentials?: {
         accessKeyId?: string
         secretAccessKey?: string,
@@ -69,7 +69,7 @@ export class Configuration {
      * @memberof Configuration
      */
     awsv4?: AWSv4Configuration;{{/withAWSV4Signature}}
-    /**
+     /**
      * override base path
      *
      * @type {string}
