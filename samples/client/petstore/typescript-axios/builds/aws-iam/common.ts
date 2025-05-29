@@ -98,6 +98,15 @@ export const setAwsSignatureToObject = async function (requestOptions: any, url:
                 credentials = await defaultProvider()();
             }
 
+            // DEBUG: Log input parameters
+            console.log('AWS Signing Debug:');
+            console.log('- Input url.href:', url.href);
+            console.log('- Input url.host:', url.host);
+            console.log('- Input url.pathname:', url.pathname);
+            console.log('- Input url.search:', url.search);
+            console.log('- configuration.basePath:', configuration.basePath);
+            console.log('- BASE_PATH:', BASE_PATH);
+
             // Construct the real URL for signing (not the dummy URL)
             // Get the real base path from configuration or default BASE_PATH
             const realBasePath = configuration.basePath || BASE_PATH || '';
@@ -106,35 +115,22 @@ export const setAwsSignatureToObject = async function (requestOptions: any, url:
             if (realBasePath) {
                 // If we have a base path, construct the full URL
                 const fullUrl = realBasePath.replace(/\/+$/, '') + url.pathname + url.search;
+                console.log('- Constructed fullUrl:', fullUrl);
                 realUrl = new URL(fullUrl);
             } else {
                 // Fallback to the original URL (though this might still be dummy)
                 realUrl = url;
             }
 
-            // Handle AWS service-specific URL patterns
-            let signingPath = realUrl.pathname + realUrl.search;
-
-            // API Gateway stage handling
-            if (configuration.awsv4.options?.stage) {
-                const stage = configuration.awsv4.options.stage.startsWith('/')
-                    ? configuration.awsv4.options.stage
-                    : '/' + configuration.awsv4.options.stage;
-                signingPath = stage + signingPath;
-            }
-
-            // Custom path prefix handling (alternative to stage)
-            if (configuration.awsv4.options?.pathPrefix && !configuration.awsv4.options?.stage) {
-                const prefix = configuration.awsv4.options.pathPrefix.startsWith('/')
-                    ? configuration.awsv4.options.pathPrefix
-                    : '/' + configuration.awsv4.options.pathPrefix;
-                signingPath = prefix + signingPath;
-            }
+            console.log('- Final realUrl.href:', realUrl.href);
+            console.log('- Final realUrl.host:', realUrl.host);
+            console.log('- Final realUrl.pathname:', realUrl.pathname);
+            console.log('- Final realUrl.search:', realUrl.search);
 
             // Create request object in format expected by aws4.sign()
             const requestToSign = {
                 host: realUrl.host,
-                path: signingPath,
+                path: realUrl.pathname + realUrl.search,
                 method: requestOptions.method?.toUpperCase() || 'GET',
                 headers: { ...requestOptions.headers },
                 body: requestOptions.data,
@@ -142,8 +138,12 @@ export const setAwsSignatureToObject = async function (requestOptions: any, url:
                 region: configuration.awsv4.options?.region || process.env.AWS_REGION || 'us-east-1'
             };
 
+            console.log('- AWS signing request:', JSON.stringify(requestToSign, null, 2));
+
             // Sign the request
             const signedRequest = aws4.sign(requestToSign, credentials);
+
+            console.log('- Signed headers:', signedRequest.headers);
 
             // Apply signed headers to axios request
             if (signedRequest.headers) {
@@ -233,7 +233,17 @@ export const toPathString = function (url: URL) {
  */
 export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxios: AxiosInstance, BASE_PATH: string, configuration?: Configuration) {
     return <T = unknown, R = AxiosResponse<T>>(axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-        const axiosRequestArgs = {...axiosArgs.options, url: (axios.defaults.baseURL ? '' : configuration?.basePath ?? basePath) + axiosArgs.url};
+        // DEBUG: Log final URL construction
+        console.log('Final Request Debug:');
+        console.log('- axiosArgs.url:', axiosArgs.url);
+        console.log('- axios.defaults.baseURL:', axios.defaults.baseURL);
+        console.log('- configuration?.basePath:', configuration?.basePath);
+        console.log('- basePath parameter:', basePath);
+
+        const finalUrl = (axios.defaults.baseURL ? '' : configuration?.basePath ?? basePath) + axiosArgs.url;
+        console.log('- Final axios URL:', finalUrl);
+
+        const axiosRequestArgs = {...axiosArgs.options, url: finalUrl};
         return axios.request<T, R>(axiosRequestArgs);
     };
 }

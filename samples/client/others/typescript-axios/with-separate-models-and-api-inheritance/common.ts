@@ -145,7 +145,17 @@ export const toPathString = function (url: URL) {
  */
 export const createRequestFunction = function (axiosArgs: RequestArgs, globalAxios: AxiosInstance, BASE_PATH: string, configuration?: Configuration) {
     return <T = unknown, R = AxiosResponse<T>>(axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-        const axiosRequestArgs = {...axiosArgs.options, url: (axios.defaults.baseURL ? '' : configuration?.basePath ?? basePath) + axiosArgs.url};
+        // DEBUG: Log final URL construction
+        console.log('Final Request Debug:');
+        console.log('- axiosArgs.url:', axiosArgs.url);
+        console.log('- axios.defaults.baseURL:', axios.defaults.baseURL);
+        console.log('- configuration?.basePath:', configuration?.basePath);
+        console.log('- basePath parameter:', basePath);
+
+        const finalUrl = (axios.defaults.baseURL ? '' : configuration?.basePath ?? basePath) + axiosArgs.url;
+        console.log('- Final axios URL:', finalUrl);
+
+        const axiosRequestArgs = {...axiosArgs.options, url: finalUrl};
         return axios.request<T, R>(axiosRequestArgs);
     };
 }
