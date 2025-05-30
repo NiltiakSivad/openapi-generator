@@ -77,7 +77,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
 
             // authentication sigv4_auth required
-            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
             // aws v4 signature required
             await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
 
@@ -111,7 +110,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
 
             // authentication aws_iam required
-            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
             // aws v4 signature required
             await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
 
