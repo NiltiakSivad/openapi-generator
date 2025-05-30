@@ -22,7 +22,7 @@ import type { RequestArgs } from './base{{importFileExtension}}';
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base{{importFileExtension}}';
 
 {{#withAWSV4Signature}}
-import { setAwsSignatureToObject } from './common';
+import { getSignedAwsHeaders } from './common';
 {{/withAWSV4Signature}}
 
 {{#models}}

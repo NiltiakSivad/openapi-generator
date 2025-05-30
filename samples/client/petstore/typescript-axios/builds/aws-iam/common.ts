@@ -80,7 +80,7 @@ export const setBearerAuthToObject = async function (object: any, configuration?
  * @throws {RequiredError}
  * @export
  */
-export const setAwsSignatureToObject = async function (requestOptions: any, url: URL, configuration?: Configuration): Promise<OutgoingHttpHeaders> {
+export const getSignedAwsHeaders = async function (requestOptions: any, url: URL, configuration?: Configuration): Promise<OutgoingHttpHeaders> {
     try {
         let credentials;
 
