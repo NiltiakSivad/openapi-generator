@@ -80,6 +80,13 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
             let awsSignatureHeaders = {};
 
+    
+            // AWS V4 Signature auth detected - need to set body/form data before signing
+            // Set body before AWS signing
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            localVarRequestOptions.data = serializeDataIfNeeded(pet, localVarRequestOptions, configuration)
+    
+    
             // authentication aws_iam required
             // aws v4 signature required
             awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)
@@ -90,7 +97,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(pet, localVarRequestOptions, configuration)
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(pet, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -116,6 +126,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
             let awsSignatureHeaders = {};
 
+    
+            // AWS V4 Signature auth detected - need to set body/form data before signing
+    
+    
             // authentication sigv4_auth required
             // aws v4 signature required
             awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)
@@ -149,6 +163,10 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarQueryParameter = {} as any;
             let awsSignatureHeaders = {};
 
+    
+            // AWS V4 Signature auth detected - need to set body/form data before signing
+    
+    
             // authentication aws_iam required
             // aws v4 signature required
             awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)

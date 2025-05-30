@@ -82,22 +82,6 @@ export const setBearerAuthToObject = async function (object: any, configuration?
  */
 export const getSignedAwsHeaders = async function (requestOptions: any, url: URL, configuration?: Configuration): Promise<OutgoingHttpHeaders> {
     try {
-        // Handle body serialization if needed
-        if (requestOptions.data !== undefined && requestOptions.data !== null) {
-            // Check if data needs serialization (not already a string or FormData)
-            const needsSerialization = typeof requestOptions.data !== 'string' &&
-                                     !(typeof FormData !== 'undefined' && requestOptions.data instanceof FormData) &&
-                                     !(requestOptions.data instanceof URLSearchParams);
-
-            if (needsSerialization) {
-                // Check if it should be JSON based on Content-Type
-                const contentType = requestOptions.headers?.['Content-Type'] || 'application/json';
-                if (contentType.includes('json')) {
-                    requestOptions.data = JSON.stringify(requestOptions.data);
-                }
-            }
-        }
-
         let credentials;
 
         // Strategy 1: Use explicit credentials if provided (highest priority)

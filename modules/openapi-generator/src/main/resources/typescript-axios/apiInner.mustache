@@ -73,6 +73,26 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
             const localVarFormParams = new {{^multipartFormData}}URLSearchParams(){{/multipartFormData}}{{#multipartFormData}}((configuration && configuration.formDataCtor) || FormData)(){{/multipartFormData}};{{/hasFormParams}}{{/vendorExtensions}}
             let awsSignatureHeaders = {};
 
+    {{#hasAuthMethods}}
+    {{#authMethods}}{{#isAWSV4Signature}}
+            // AWS V4 Signature auth detected - need to set body/form data before signing
+    {{#bodyParam}}
+            // Set body before AWS signing
+            {{^consumes}}
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+            {{/consumes}}
+            {{#consumes.0}}
+            localVarHeaderParameter['Content-Type'] = '{{{mediaType}}}';
+            {{/consumes.0}}
+            localVarRequestOptions.data = serializeDataIfNeeded({{paramName}}, localVarRequestOptions, configuration)
+    {{/bodyParam}}
+    {{#vendorExtensions}}{{#hasFormParams}}
+            // Set form data before AWS signing
+            {{^multipartFormData}}localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';{{/multipartFormData}}{{#multipartFormData}}localVarHeaderParameter['Content-Type'] = 'multipart/form-data';{{/multipartFormData}}
+            localVarRequestOptions.data = localVarFormParams{{#vendorExtensions}}{{^multipartFormData}}.toString(){{/multipartFormData}}{{/vendorExtensions}};
+    {{/hasFormParams}}{{/vendorExtensions}}
+    {{/isAWSV4Signature}}{{/authMethods}}
+    {{/hasAuthMethods}}
     {{#authMethods}}
             // authentication {{name}} required
             {{#isApiKey}}
@@ -237,10 +257,16 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions,{{#hasFormParams}}{{#multipartFormData}} ...(localVarFormParams as any).getHeaders?.(),{{/multipartFormData}}{{/hasFormParams}} ...awsSignatureHeaders, ...options.headers};
     {{#hasFormParams}}
-            localVarRequestOptions.data = localVarFormParams{{#vendorExtensions}}{{^multipartFormData}}.toString(){{/multipartFormData}}{{/vendorExtensions}};
+            // Only set form data if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = localVarFormParams{{#vendorExtensions}}{{^multipartFormData}}.toString(){{/multipartFormData}}{{/vendorExtensions}};
+            }
     {{/hasFormParams}}
     {{#bodyParam}}
-            localVarRequestOptions.data = serializeDataIfNeeded({{paramName}}, localVarRequestOptions, configuration)
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded({{paramName}}, localVarRequestOptions, configuration)
+            }
     {{/bodyParam}}
             return {
                 url: toPathString(localVarUrlObj),
