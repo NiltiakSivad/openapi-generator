@@ -274,19 +274,20 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
+            // Set search params BEFORE auth methods (including AWS signing)
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -315,19 +316,19 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
+            // Set search params BEFORE auth methods (including AWS signing)
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
-    
             if (apiKey != null) {
                 localVarHeaderParameter['api_key'] = String(apiKey);
             }
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -354,20 +355,20 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-            // authentication petstore_auth required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
             if (status) {
                 localVarQueryParameter['status'] = status.join(COLLECTION_FORMATS.csv);
             }
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
+            // authentication petstore_auth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -395,20 +396,20 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-            // authentication petstore_auth required
-            // oauth required
-            await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
             if (tags) {
                 localVarQueryParameter['tags'] = tags.join(COLLECTION_FORMATS.csv);
             }
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
+            // authentication petstore_auth required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -436,15 +437,15 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
+            // Set search params BEFORE auth methods (including AWS signing)
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
             // authentication api_key required
             await setApiKeyToObject(localVarHeaderParameter, "api_key", configuration)
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -471,19 +472,20 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
+            // Set search params BEFORE auth methods (including AWS signing)
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -514,27 +516,20 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new URLSearchParams();
+            let awsSignatureHeaders = {};
 
+            // Set search params BEFORE auth methods (including AWS signing)
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
-            if (name !== undefined) { 
-                localVarFormParams.set('name', name as any);
-            }
-    
-            if (status !== undefined) { 
-                localVarFormParams.set('status', status as any);
-            }
-    
-    
-            localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = localVarFormParams.toString();
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only set form data if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = localVarFormParams.toString();
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -565,27 +560,20 @@ export const PetApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+            let awsSignatureHeaders = {};
 
+            // Set search params BEFORE auth methods (including AWS signing)
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
             // authentication petstore_auth required
             // oauth required
             await setOAuthToObject(localVarHeaderParameter, "petstore_auth", ["write:pets", "read:pets"], configuration)
-
-            if (additionalMetadata !== undefined) { 
-                localVarFormParams.append('additionalMetadata', additionalMetadata as any);
-            }
-    
-            if (file !== undefined) { 
-                localVarFormParams.append('file', file as any);
-            }
-    
-    
-            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = localVarFormParams;
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only set form data if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = localVarFormParams;
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -959,13 +947,12 @@ export const StoreApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -989,15 +976,15 @@ export const StoreApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
+            // Set search params BEFORE auth methods (including AWS signing)
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+    
             // authentication api_key required
             await setApiKeyToObject(localVarHeaderParameter, "api_key", configuration)
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1025,13 +1012,12 @@ export const StoreApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1058,16 +1044,16 @@ export const StoreApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1270,16 +1256,16 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1306,16 +1292,16 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1342,16 +1328,16 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1379,13 +1365,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1413,13 +1398,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1449,6 +1433,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
             if (username !== undefined) {
                 localVarQueryParameter['username'] = username;
@@ -1458,12 +1443,10 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 localVarQueryParameter['password'] = password;
             }
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1487,13 +1470,12 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -1524,16 +1506,16 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,

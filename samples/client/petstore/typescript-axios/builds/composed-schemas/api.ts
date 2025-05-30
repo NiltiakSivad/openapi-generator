@@ -201,16 +201,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(filePostRequest, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(filePostRequest, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -234,16 +234,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(petsFilteredPatchRequest, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(petsFilteredPatchRequest, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -267,16 +267,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            // Set search params BEFORE auth methods (including AWS signing)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(petsPatchRequest, localVarRequestOptions, configuration)
-
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            // Only serialize body if not already set (e.g., by AWS signing)
+            if (localVarRequestOptions.data === undefined) {
+                localVarRequestOptions.data = serializeDataIfNeeded(petsPatchRequest, localVarRequestOptions, configuration)
+            }
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
