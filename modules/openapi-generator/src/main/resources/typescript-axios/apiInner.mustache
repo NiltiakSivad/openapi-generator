@@ -242,7 +242,6 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
     {{#bodyParam}}
             localVarRequestOptions.data = serializeDataIfNeeded({{paramName}}, localVarRequestOptions, configuration)
     {{/bodyParam}}
-
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,

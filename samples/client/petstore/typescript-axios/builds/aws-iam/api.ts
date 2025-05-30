@@ -59,6 +59,45 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
     return {
         /**
          * 
+         * @summary Create a new pet
+         * @param {Pet} pet 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPet: async (pet: Pet, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'pet' is not null or undefined
+            assertParamExists('createPet', 'pet', pet)
+            const localVarPath = `/pet`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
+
+            // authentication aws_iam required
+            // aws v4 signature required
+            awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(pet, localVarRequestOptions, configuration)
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Returns pet inventories by status
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -85,7 +124,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
-
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -119,7 +157,6 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
-
             return {
                 url: toPathString(localVarUrlObj),
                 options: localVarRequestOptions,
@@ -135,6 +172,19 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 export const DefaultApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @summary Create a new pet
+         * @param {Pet} pet 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createPet(pet: Pet, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Pet>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPet(pet, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DefaultApi.createPet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
         /**
          * 
          * @summary Returns pet inventories by status
@@ -171,6 +221,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     return {
         /**
          * 
+         * @summary Create a new pet
+         * @param {Pet} pet 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPet(pet: Pet, options?: RawAxiosRequestConfig): AxiosPromise<Pet> {
+            return localVarFp.createPet(pet, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Returns pet inventories by status
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -197,6 +257,18 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI {
+    /**
+     * 
+     * @summary Create a new pet
+     * @param {Pet} pet 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public createPet(pet: Pet, options?: RawAxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).createPet(pet, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Returns pet inventories by status

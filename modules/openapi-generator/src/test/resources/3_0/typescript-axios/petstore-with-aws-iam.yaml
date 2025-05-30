@@ -21,6 +21,26 @@ paths:
                 $ref: '#/components/schemas/Pet'
         '404':
           description: Pet not found
+    post:
+      summary: Create a new pet
+      operationId: createPet
+      security:
+        - aws_iam: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pet'
+      responses:
+        '201':
+          description: Pet created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid input
   /store/inventory:
     get:
       summary: Returns pet inventories by status
