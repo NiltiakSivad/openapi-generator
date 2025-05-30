@@ -107,6 +107,15 @@ export const getSignedAwsHeaders = async function (requestOptions: any, url: URL
             // If we have a base path, construct the full URL
             const fullUrl = realBasePath.replace(/\/+$/, '') + url.pathname + url.search;
             realUrl = new URL(fullUrl);
+
+            // Debug logging
+            console.log('AWS Signing Debug:', {
+                originalPath: url.pathname,
+                basePath: realBasePath,
+                fullUrl: fullUrl,
+                signedPath: realUrl.pathname + realUrl.search,
+                host: realUrl.host
+            });
         } else {
             // ERROR: Cannot sign AWS request without a real base URL
             // The dummy URL (example.com) would result in invalid signatures
@@ -124,6 +133,17 @@ export const getSignedAwsHeaders = async function (requestOptions: any, url: URL
             service: configuration?.awsv4?.options?.service || 'execute-api',
             region: configuration?.awsv4?.options?.region || process.env.AWS_REGION || 'us-east-1'
         };
+
+        // Debug logging
+        console.log('AWS Request to Sign:', {
+            method: requestToSign.method,
+            path: requestToSign.path,
+            host: requestToSign.host,
+            headers: Object.keys(requestToSign.headers || {}),
+            bodyLength: requestToSign.body ? JSON.stringify(requestToSign.body).length : 0,
+            service: requestToSign.service,
+            region: requestToSign.region
+        });
 
         // Sign the request
         const signedRequest = aws4.sign(requestToSign, credentials);
