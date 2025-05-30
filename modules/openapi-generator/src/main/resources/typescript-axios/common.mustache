@@ -74,7 +74,7 @@ export const setBearerAuthToObject = async function (object: any, configuration?
  * @throws {RequiredError}
  * @export
  */
-export const setAwsSignatureToObject = async function (requestOptions: any, url: URL, configuration?: Configuration) {
+export const setAwsSignatureToObject = async function (requestOptions: any, url: URL, configuration?: Configuration): Promise<Record<string, string>> {
     try {
         let credentials;
 
@@ -124,17 +124,13 @@ export const setAwsSignatureToObject = async function (requestOptions: any, url:
         // Sign the request
         const signedRequest = aws4.sign(requestToSign, credentials);
 
-        // Apply signed headers to axios request
-        if (signedRequest.headers) {
-            requestOptions.headers = {
-                ...requestOptions.headers,
-                ...signedRequest.headers
-            };
-        }
+        // Return the AWS signature headers (Authorization, X-Amz-Date, etc.)
+        return signedRequest.headers || {};
 
     } catch (error) {
         console.warn('AWS credential resolution failed:', error);
-        // Continue without signing - let the request proceed
+        // Return empty headers on failure
+        return {};
     }
 }
 {{/withAWSV4Signature}}
