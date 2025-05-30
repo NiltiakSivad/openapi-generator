@@ -75,15 +75,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
             // authentication sigv4_auth required
             // aws v4 signature required
-            await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
+            awsSignatureHeaders = await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -108,15 +109,16 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            let awsSignatureHeaders = {};
 
             // authentication aws_iam required
             // aws v4 signature required
-            await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
+            awsSignatureHeaders = await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...awsSignatureHeaders, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
