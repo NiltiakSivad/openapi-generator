@@ -104,8 +104,10 @@ export const setAwsSignatureToObject = async function (requestOptions: any, url:
             const fullUrl = realBasePath.replace(/\/+$/, '') + url.pathname + url.search;
             realUrl = new URL(fullUrl);
         } else {
-            // Fallback to the original URL (though this might still be dummy)
-            realUrl = url;
+            // ERROR: Cannot sign AWS request without a real base URL
+            // The dummy URL (example.com) would result in invalid signatures
+            console.error('AWS V4 Signature Error: No basePath configured. Set configuration.basePath to your AWS API Gateway URL (e.g., "https://abc123.execute-api.us-east-1.amazonaws.com/prod")');
+            throw new Error('AWS V4 Signature requires a real basePath, not dummy URL');
         }
 
         // Create request object in format expected by aws4.sign()

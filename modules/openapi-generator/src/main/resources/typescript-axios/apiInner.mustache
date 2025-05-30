@@ -75,12 +75,14 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
     {{#authMethods}}
             // authentication {{name}} required
             {{#isApiKey}}
+            {{^isAWSV4Signature}}
             {{#isKeyInHeader}}
             await setApiKeyToObject(localVarHeaderParameter, "{{keyParamName}}", configuration)
             {{/isKeyInHeader}}
             {{#isKeyInQuery}}
             await setApiKeyToObject(localVarQueryParameter, "{{keyParamName}}", configuration)
             {{/isKeyInQuery}}
+            {{/isAWSV4Signature}}
             {{/isApiKey}}
             {{#isBasicBasic}}
             // http basic authentication required
