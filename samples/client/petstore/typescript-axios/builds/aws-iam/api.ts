@@ -23,7 +23,7 @@ import type { RequestArgs } from './base';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerMap } from './base';
 
-import { setAwsSignatureToObject } from './common';
+import { getSignedAwsHeaders } from './common';
 
 /**
  * 
@@ -79,7 +79,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
             // authentication sigv4_auth required
             // aws v4 signature required
-            awsSignatureHeaders = await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
+            awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -113,7 +113,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
             // authentication aws_iam required
             // aws v4 signature required
-            awsSignatureHeaders = await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
+            awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);

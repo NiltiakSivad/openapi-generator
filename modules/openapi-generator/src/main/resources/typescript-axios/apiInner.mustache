@@ -21,7 +21,7 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '{{apiRelativeToRoot}}base{{importFileExtension}}';
 {{#withAWSV4Signature}}
 // @ts-ignore
-import { setAwsSignatureToObject } from '{{apiRelativeToRoot}}common';
+import { getSignedAwsHeaders } from '{{apiRelativeToRoot}}common';
 {{/withAWSV4Signature}}
 {{#imports}}
 // @ts-ignore
@@ -99,7 +99,7 @@ export const {{classname}}AxiosParamCreator = function (configuration?: Configur
             {{/isOAuth}}
             {{#isAWSV4Signature}}
             // aws v4 signature required
-            awsSignatureHeaders = await setAwsSignatureToObject(localVarRequestOptions, localVarUrlObj, configuration)
+            awsSignatureHeaders = await getSignedAwsHeaders(localVarRequestOptions, localVarUrlObj, configuration)
             {{/isAWSV4Signature}}
     {{/authMethods}}
     {{#queryParams}}
