@@ -144,7 +144,7 @@ public class TypeScriptAxiosClientCodegen extends AbstractTypeScriptClientCodege
         // Check security schemes for AWS V4 signature patterns
         if (openAPI.getComponents() != null && openAPI.getComponents().getSecuritySchemes() != null) {
             return openAPI.getComponents().getSecuritySchemes().entrySet().stream()
-                .anyMatch(entry -> isAwsV4SecurityScheme(entry.getKey(), entry.getValue()));
+                .anyMatch(entry -> isAwsV4SecurityScheme(entry.getKey(), entry.getValue(), openAPI));
         }
 
         return false;
@@ -153,7 +153,7 @@ public class TypeScriptAxiosClientCodegen extends AbstractTypeScriptClientCodege
     /**
      * Determines if a security scheme represents AWS V4 signature authentication
      */
-    private boolean isAwsV4SecurityScheme(String schemeName, SecurityScheme scheme) {
+    private boolean isAwsV4SecurityScheme(String schemeName, SecurityScheme scheme, OpenAPI openAPI) {
         if (scheme == null) {
             return false;
         }
@@ -448,7 +448,7 @@ public class TypeScriptAxiosClientCodegen extends AbstractTypeScriptClientCodege
         for (CodegenSecurity security : securities) {
             if (securitySchemeMap.containsKey(security.name)) {
                 SecurityScheme scheme = securitySchemeMap.get(security.name);
-                if (isAwsV4SecurityScheme(security.name, scheme)) {
+                if (isAwsV4SecurityScheme(security.name, scheme, this.openAPI)) {
                     security.isAWSV4Signature = true;
                     LOGGER.info("Detected AWS V4 signature security scheme: {}", security.name);
                 }

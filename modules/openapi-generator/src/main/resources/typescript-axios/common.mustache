@@ -108,21 +108,10 @@ export const setAwsSignatureToObject = async function (requestOptions: any, url:
             realUrl = url;
         }
 
-        // Handle AWS API Gateway stage for signing path
-        let signingPath = realUrl.pathname + realUrl.search;
-
-        // API Gateway stage handling
-        if (configuration?.awsv4?.options?.stage) {
-            const stage = configuration.awsv4.options.stage.startsWith('/')
-                ? configuration.awsv4.options.stage
-                : '/' + configuration.awsv4.options.stage;
-            signingPath = stage + signingPath;
-        }
-
         // Create request object in format expected by aws4.sign()
         const requestToSign = {
             host: realUrl.host,
-            path: signingPath,
+            path: realUrl.pathname + realUrl.search,
             method: requestOptions.method?.toUpperCase() || 'GET',
             headers: { ...requestOptions.headers },
             body: requestOptions.data,

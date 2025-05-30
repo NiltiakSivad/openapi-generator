@@ -17,12 +17,6 @@ export interface AWSv4Configuration {
     options?: {
         region?: string
         service?: string
-        /**
-         * API Gateway stage (e.g., 'default', 'prod', 'dev')
-         * This will be prepended to all request paths for signing: /stage/original-path
-         * Only needed if the stage is not included in the OpenAPI server URL
-         */
-        stage?: string
     }
     credentials?: {
         accessKeyId?: string
@@ -76,7 +70,6 @@ export class Configuration {
      * @param {Object} AWS4Signature - AWS4 Signature security
      * @param {string} options.region - aws region
      * @param {string} options.service - name of the service.
-     * @param {string} options.stage - API Gateway stage (e.g., 'default', 'prod') - prepended to signing path
      * @param {string} credentials.accessKeyId - aws access key id
      * @param {string} credentials.secretAccessKey - aws access key
      * @param {string} credentials.sessionToken - aws session token
