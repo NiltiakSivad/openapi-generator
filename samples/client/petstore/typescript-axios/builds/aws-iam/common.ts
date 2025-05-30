@@ -20,6 +20,7 @@ import { RequiredError } from "./base";
 import * as aws4 from 'aws4';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { BASE_PATH } from './base';
+import { OutgoingHttpHeaders } from 'http';
 
 /**
  *
@@ -79,7 +80,7 @@ export const setBearerAuthToObject = async function (object: any, configuration?
  * @throws {RequiredError}
  * @export
  */
-export const setAwsSignatureToObject = async function (requestOptions: any, url: URL, configuration?: Configuration): Promise<Record<string, string>> {
+export const setAwsSignatureToObject = async function (requestOptions: any, url: URL, configuration?: Configuration): Promise<OutgoingHttpHeaders> {
     try {
         let credentials;
 
